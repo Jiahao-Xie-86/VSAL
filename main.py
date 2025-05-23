@@ -14,7 +14,12 @@ import torch.nn.functional as F
 import random
 from collections import Counter
 import os
+import multiprocessing
 
+
+device = torch.device("cuda:2")
+
+torch.cuda.empty_cache()
 
 # # Define the function to sample arbitrary training and validation set sizes
 # Define the function to sample arbitrary training and validation set sizes
@@ -93,157 +98,172 @@ def sample_train_val(full_dataset, sample_size, test_size=500, val_ratio=0.2, se
 
     return train_dataset, val_dataset, test_dataset, pretrain_dataset
 
-# Set device
-device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
-
-# ---- Load Dataset ----
-# hamiltonian_dir = './small_Hamiltonian_hard'
-# non_hamiltonian_dir = './small_non_Hamiltonian_hard'
-hamiltonian_dir = './hamiltonian_medium_mat'
-non_hamiltonian_dir = './non_hamiltonian_medium_mat'
-
-# Create the dataset
-#train_dataset = HamiltonianGraphDataset(hamiltonian_dir, non_hamiltonian_dir)
-full_dataset = HamiltonianGraphDataset(hamiltonian_dir, non_hamiltonian_dir)
-
-# Define the sample size you want to use (arbitrary number)
-sample_size = 200
-# Call the function to sample datasets
-train_dataset, val_dataset, test_dataset, pretrain_dataset = sample_train_val(full_dataset, sample_size=sample_size)
-
-# Create the DataLoader with the custom collate function
-# ---- Create DataLoaders for Train, Validation, and Test ----
-# Create DataLoader with the balanced datasets
-train_dataloader = DataLoader(train_dataset, batch_size=10, shuffle=True, collate_fn=lambda batch: custom_collate(batch, device))
-val_dataloader = DataLoader(val_dataset, batch_size=10, shuffle=False, collate_fn=lambda batch: custom_collate(batch, device))
-test_dataloader = DataLoader(test_dataset, batch_size=10, shuffle=False,collate_fn=lambda batch: custom_collate(batch, device))
-# DataLoader for pretraining
-pretrain_dataloader = DataLoader(pretrain_dataset, batch_size=96, shuffle=True, collate_fn=lambda batch: custom_collate(batch, device))
-
-# Print the dataset sizes
-print(f"Training set size: {len(train_dataset)}")
-print(f"Validation set size: {len(val_dataset)}")
-print(f"Test set size: {len(test_dataset)}")
-print(f"Pretrain set size: {len(pretrain_dataset)}")
+def my_collate_fn(batch):
+    return custom_collate(batch)
 
 
-# ---- Directly set seeds for reproducibility ----
-seed = 42
-torch.manual_seed(seed)            # PyTorch seed
-torch.cuda.manual_seed(seed)       # CUDA seed (if using GPUs)
-torch.cuda.manual_seed_all(seed)   # If using multi-GPU setups
-np.random.seed(seed)               # NumPy seed
-random.seed(seed)                  # Python random seed
+def main():
+    # Set multiprocessing start method (spawn is required for CUDA)
+    multiprocessing.set_start_method('spawn', force=True)
+    
+    # # Set device (you can change the device index as needed)
+    # global device  # Make device accessible by my_collate_fn
 
-# Ensure deterministic behavior for some operations in PyTorch's backends
-torch.backends.cudnn.deterministic = True
-torch.backends.cudnn.benchmark = False
+    # # Set device
+    # device = torch.device("cuda:0")
 
-
-# ---- Initialize Models, Optimizers, and Criterion ----
-generator = ConditionalGraphGenerator().to(device)  # Use the conditional generator
-discriminator = GraphDiscriminator().to(device)  # Move model to device
-# classifier = get_resnet50_classifier().to(device)  # Already moved to device in the function
-classifier = get_vit_classifier().to(device)  # Already moved to device in the function
-
-# # Use DataParallel to parallelize over multiple GPUs
-# if torch.cuda.device_count() > 1:
-#     print(f"Using {torch.cuda.device_count()} GPUs!")
-#     generator = nn.DataParallel(generator)
-#     discriminator = nn.DataParallel(discriminator)
-#     #classifier = nn.DataParallel(classifier)
-
-base_output_dir = "cgan_training_outputs"
-
-# Ensure the base output directory exists
-os.makedirs(base_output_dir, exist_ok=True)
-# ---- Pretrain Generator and Discriminator ----
-# optimizer_g_pretrain = optim.RMSprop(generator.parameters(), lr=0.0001, weight_decay=1e-4)
-# optimizer_d_pretrain = optim.RMSprop(discriminator.parameters(), lr=0.0005, weight_decay=1e-4)
-
-# print("Pretraining Generator and Discriminator...")
-# train_gan(generator, discriminator, pretrain_dataloader, optimizer_g_pretrain, optimizer_d_pretrain, device, epochs=500,output_dir=base_output_dir)
+    # ---- Load Dataset ----
+    hamiltonian_dir = './small_planar_dataset/small_nonplanar'
+    non_hamiltonian_dir = './small_planar_dataset/small_planar'
 
 
-# Define the number of iterations
-num_runs = 5
-base_output_dir = "cgan_training_outputs"
+    # Create the dataset
+    #train_dataset = HamiltonianGraphDataset(hamiltonian_dir, non_hamiltonian_dir)
+    full_dataset = HamiltonianGraphDataset(hamiltonian_dir, non_hamiltonian_dir)
 
-# Ensure the base output directory exists
-os.makedirs(base_output_dir, exist_ok=True)
+    # Define the sample size you want to use (arbitrary number)
+    sample_size = 200
+    # Call the function to sample datasets
+    train_dataset, val_dataset, test_dataset, pretrain_dataset = sample_train_val(full_dataset, sample_size=sample_size)
 
-for run in range(1, num_runs + 1):
-    # ---- Load the pretrained models ----
+    # Create the DataLoader with the custom collate function
+    # ---- Create DataLoaders for Train, Validation, and Test ----
+    # Create DataLoader with the balanced datasets
+    train_dataloader = DataLoader(train_dataset, batch_size=16, shuffle=True, num_workers=8,  collate_fn=my_collate_fn)
+    val_dataloader = DataLoader(val_dataset, batch_size=16, shuffle=False, num_workers=8,  collate_fn=my_collate_fn)
+    test_dataloader = DataLoader(test_dataset, batch_size=16, shuffle=False, num_workers=8,  collate_fn=my_collate_fn)
+    # DataLoader for pretraining
+    pretrain_dataloader = DataLoader(pretrain_dataset, batch_size=96, shuffle=True, num_workers=8, collate_fn=my_collate_fn)
+
+    # Print the dataset sizes
+    print(f"Training set size: {len(train_dataset)}")
+    print(f"Validation set size: {len(val_dataset)}")
+    print(f"Test set size: {len(test_dataset)}")
+    print(f"Pretrain set size: {len(pretrain_dataset)}")
+
+
+    # ---- Directly set seeds for reproducibility ----
+    seed = 42
+    torch.manual_seed(seed)            # PyTorch seed
+    torch.cuda.manual_seed(seed)       # CUDA seed (if using GPUs)
+    torch.cuda.manual_seed_all(seed)   # If using multi-GPU setups
+    np.random.seed(seed)               # NumPy seed
+    random.seed(seed)                  # Python random seed
+
+    # Ensure deterministic behavior for some operations in PyTorch's backends
+    torch.backends.cudnn.deterministic = True
+    torch.backends.cudnn.benchmark = False
+
+
+    # ---- Initialize Models, Optimizers, and Criterion ----
     generator = ConditionalGraphGenerator().to(device)  # Use the conditional generator
     discriminator = GraphDiscriminator().to(device)  # Move model to device
+    # classifier = get_resnet50_classifier().to(device)  # Already moved to device in the function
     classifier = get_vit_classifier().to(device)  # Already moved to device in the function
-    # classifier = get_resnet50_classifier().to(device)
-    # Load pretrained generator and discriminator
-    try:
-        print("Loading pretrained generator and discriminator...")
-        generator_pretrained_path = os.path.join(base_output_dir, "best_generator_pretrained.pth")
-        pretrained_generator_dict = torch.load(generator_pretrained_path)
-        discriminator_pretrained_path = os.path.join(base_output_dir, "best_discriminator_pretrained.pth")
-        pretrained_discriminator_dict = torch.load(discriminator_pretrained_path)
 
-        # Remove the 'module.' prefix if loading without DataParallel
-        pretrained_generator_dict = remove_module_prefix(pretrained_generator_dict)
-        pretrained_discriminator_dict = remove_module_prefix(pretrained_discriminator_dict)
-
-        generator.load_state_dict(pretrained_generator_dict)
-        discriminator.load_state_dict(pretrained_discriminator_dict)
-
-        print("Pretrained models loaded successfully.")
-    except FileNotFoundError:
-        print("Pretrained model files not found. Proceeding without pretraining.")
-
-    # #Use DataParallel to parallelize over multiple GPUs (if available)
+    # # Use DataParallel to parallelize over multiple GPUs
     # if torch.cuda.device_count() > 1:
     #     print(f"Using {torch.cuda.device_count()} GPUs!")
     #     generator = nn.DataParallel(generator)
     #     discriminator = nn.DataParallel(discriminator)
-    #     classifier = nn.DataParallel(classifier)
+    #     #classifier = nn.DataParallel(classifier)
 
-    optimizer_g = optim.RMSprop(generator.parameters(), lr=0.0001, weight_decay=1e-4)
-    optimizer_d = optim.RMSprop(discriminator.parameters(), lr=0.0005, weight_decay=1e-4)
-    optimizer_c = optim.Adam(classifier.parameters(), lr=0.00001, weight_decay=1e-4)
+    base_output_dir = "cgan_training_outputs"
 
-    # Define learning rate schedulers for the optimizers
-    scheduler_g = lr_scheduler.StepLR(optimizer_g, step_size=5, gamma=0.9)
-    scheduler_d = lr_scheduler.StepLR(optimizer_d, step_size=5, gamma=0.9)
-    scheduler_c = lr_scheduler.StepLR(optimizer_c, step_size=5, gamma=0.9)
+    # Ensure the base output directory exists
+    os.makedirs(base_output_dir, exist_ok=True)
+    # ---- Pretrain Generator and Discriminator ----
+    optimizer_g_pretrain = optim.RMSprop(generator.parameters(), lr=0.0001, weight_decay=1e-4)
+    optimizer_d_pretrain = optim.RMSprop(discriminator.parameters(), lr=0.0005, weight_decay=1e-4)
 
-    #criterion = nn.BCELoss()  # For GAN
-    classification_criterion = nn.CrossEntropyLoss()  # For classification task
+    print("Pretraining Generator and Discriminator...")
+    train_gan(generator, discriminator, pretrain_dataloader, optimizer_g_pretrain, optimizer_d_pretrain, device, epochs=500,output_dir=base_output_dir)
 
-    # # ---- Train the framework using Conditional GAN ----
-    # train_combined_cgan(generator, discriminator, classifier, 
-    #                     train_dataloader, val_dataloader, test_dataloader, 
-    #                     optimizer_g, optimizer_d, optimizer_c, scheduler_g, scheduler_d, scheduler_c,
-    #                     classification_criterion, device,  # Pass device to the function
-    #                     epochs=100)
 
-    # # ---- Test the model ----
-    # evaluate_model(generator, classifier, test_dataloader, device)
+    # Define the number of iterations
+    num_runs = 3
+    base_output_dir = "cgan_training_outputs"
 
-    # Create a new directory named with the run number (e.g., '1', '2', etc.)
-    output_dir = os.path.join(base_output_dir, str(run))
-    os.makedirs(output_dir, exist_ok=True)
+    # Ensure the base output directory exists
+    os.makedirs(base_output_dir, exist_ok=True)
 
-    print(f"Starting run {run}, outputs will be stored in {output_dir}")
+    for run in range(1, num_runs + 1):
+        # ---- Load the pretrained models ----
+        generator = ConditionalGraphGenerator().to(device)  # Use the conditional generator
+        discriminator = GraphDiscriminator().to(device)  # Move model to device
+        classifier = get_vit_classifier().to(device)  # Already moved to device in the function
+        # classifier = get_resnet50_classifier().to(device)
+        # Load pretrained generator and discriminator
+        try:
+            print("Loading pretrained generator and discriminator...")
+            generator_pretrained_path = os.path.join(base_output_dir, "best_generator_pretrained.pth")
+            pretrained_generator_dict = torch.load(generator_pretrained_path)
+            discriminator_pretrained_path = os.path.join(base_output_dir, "best_discriminator_pretrained.pth")
+            pretrained_discriminator_dict = torch.load(discriminator_pretrained_path)
 
-    # ---- Train the framework using Conditional GAN ----
-    train_combined_cgan(
-        generator, discriminator, classifier,
-        train_dataloader, val_dataloader, test_dataloader,
-        optimizer_g, optimizer_d, optimizer_c,
-        scheduler_g, scheduler_d, scheduler_c,
-        classification_criterion, device,  # Pass device to the function
-        epochs=100,
-        output_dir=output_dir
-    )
+            # Remove the 'module.' prefix if loading without DataParallel
+            pretrained_generator_dict = remove_module_prefix(pretrained_generator_dict)
+            pretrained_discriminator_dict = remove_module_prefix(pretrained_discriminator_dict)
 
-    # ---- Test the model ----
-    evaluate_model(generator, classifier, test_dataloader, device)
+            generator.load_state_dict(pretrained_generator_dict)
+            discriminator.load_state_dict(pretrained_discriminator_dict)
 
-    print(f"Completed run {run}, results saved in {output_dir}")
+            print("Pretrained models loaded successfully.")
+        except FileNotFoundError:
+            print("Pretrained model files not found. Proceeding without pretraining.")
+
+        # #Use DataParallel to parallelize over multiple GPUs (if available)
+        # if torch.cuda.device_count() > 1:
+        #     print(f"Using {torch.cuda.device_count()} GPUs!")
+        #     generator = nn.DataParallel(generator)
+        #     discriminator = nn.DataParallel(discriminator)
+        #     classifier = nn.DataParallel(classifier)
+
+        optimizer_g = optim.RMSprop(generator.parameters(), lr=0.0001, weight_decay=1e-4)
+        optimizer_d = optim.RMSprop(discriminator.parameters(), lr=0.0005, weight_decay=1e-4)
+        optimizer_c = optim.Adam(classifier.parameters(), lr=0.00001, weight_decay=1e-4)
+
+        # Define learning rate schedulers for the optimizers
+        scheduler_g = lr_scheduler.StepLR(optimizer_g, step_size=5, gamma=0.9)
+        scheduler_d = lr_scheduler.StepLR(optimizer_d, step_size=5, gamma=0.9)
+        scheduler_c = lr_scheduler.StepLR(optimizer_c, step_size=5, gamma=0.9)
+
+        #criterion = nn.BCELoss()  # For GAN
+        classification_criterion = nn.CrossEntropyLoss()  # For classification task
+
+        # # ---- Train the framework using Conditional GAN ----
+        # train_combined_cgan(generator, discriminator, classifier, 
+        #                     train_dataloader, val_dataloader, test_dataloader, 
+        #                     optimizer_g, optimizer_d, optimizer_c, scheduler_g, scheduler_d, scheduler_c,
+        #                     classification_criterion, device,  # Pass device to the function
+        #                     epochs=100)
+
+        # # ---- Test the model ----
+        # evaluate_model(generator, classifier, test_dataloader, device)
+
+        # Create a new directory named with the run number (e.g., '1', '2', etc.)
+        output_dir = os.path.join(base_output_dir, str(run))
+        os.makedirs(output_dir, exist_ok=True)
+
+        print(f"Starting run {run}, outputs will be stored in {output_dir}")
+
+        # ---- Train the framework using Conditional GAN ----
+        train_combined_cgan(
+            generator, discriminator, classifier,
+            train_dataloader, val_dataloader, test_dataloader,
+            optimizer_g, optimizer_d, optimizer_c,
+            scheduler_g, scheduler_d, scheduler_c,
+            classification_criterion, device,  # Pass device to the function
+            epochs=100,
+            output_dir=output_dir
+        )
+
+        # ---- Test the model ----
+        evaluate_model(generator, classifier, test_dataloader, device)
+
+        print(f"Completed run {run}, results saved in {output_dir}")
+
+if __name__ == '__main__':
+    # Set the start method and call main
+    multiprocessing.set_start_method('spawn', force=True)
+    main()
