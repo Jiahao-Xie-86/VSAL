@@ -6,13 +6,13 @@ This repository implements VSGL, a deep learning framework for graph property de
 
 ```
 .
-├── main.py           # Main entry point for running experiments
-├── train.py          # Training and evaluation logic
-├── model.py          # Neural network architectures
-├── utils.py          # Utility functions and helpers
-├── dataset.py        # Dataset handling and preprocessing
-├── dataset/          # Graph datasets
-├── baselines/        # Comparison baseline implementations
+├── main.py                       # Main entry point for running experiments
+├── train.py                      # Training and evaluation logic
+├── model.py                      # Neural network architectures
+├── utils.py                      # Utility functions and helpers
+├── dataset.py                    # Dataset handling and preprocessing
+├── dataset/                      # Graph datasets
+├── baselines/                    # Comparison baseline implementations
 └── generate_new_graphs/          # scripts for producing large and huge graphs
 ```
 
