@@ -282,6 +282,30 @@ def get_resnet50_classifier():
     #return resnet50.to(device)  # Move the classifier to the device
     return resnet50
 
+def get_efficientnet_classifier():
+    # Load ImageNet-pretrained EfficientNet models
+
+    # load B0 224×224
+    model = timm.create_model('efficientnet_b0', pretrained=True)
+
+    # load B4 380×380
+    # model = timm.create_model('efficientnet_b4', pretrained=True)
+
+    # Replace classifier head (nn.Linear) for binary classification
+    in_features = model.classifier.in_features
+    model.classifier = nn.Linear(in_features, 2)
+
+    # #load B6 528×528
+    # weights = EfficientNet_B6_Weights.IMAGENET1K_V1
+
+    # model = efficientnet_b6(weights=weights)
+
+    # # Replace classifier head (nn.Linear) for binary classification
+    # in_features = model.classifier[1].in_features
+    # model.classifier[1] = nn.Linear(in_features, 2)
+
+    return model
+
 def get_vit_classifier():
     """
     Returns a Vision Transformer (ViT) model for binary classification.
