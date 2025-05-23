@@ -11,8 +11,9 @@ This repository implements VSGL, a deep learning framework for graph property de
 ├── model.py          # Neural network architectures
 ├── utils.py          # Utility functions and helpers
 ├── dataset.py        # Dataset handling and preprocessing
-├── dataset/          # Graph datasets 
-└── baselines/        # Comparison baseline implementations
+├── dataset/          # Graph datasets
+├── baselines/        # Comparison baseline implementations
+└── generate_new_graphs/          # scripts for producing large and huge graphs
 ```
 
 ### Key Components
@@ -37,6 +38,11 @@ This repository implements VSGL, a deep learning framework for graph property de
   - Graphormer
   - Naive Bayes
   - Random baseline
+- **`generate_new_graphs/`**: Contains multiple scripts to produce large and huge graphs for differenet tasks:
+  - produce new Hamiltonian and non-Hamiltonian graphs
+  - produce new planar and non-planar graphs
+  - produce new claw-free and non-claw-free graphs
+  - produce new tree and non-tree graphs
 
 ## Installation
 
