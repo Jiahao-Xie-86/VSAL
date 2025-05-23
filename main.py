@@ -1,7 +1,7 @@
 import torch
 from torch.utils.data import DataLoader
 from dataset import HamiltonianGraphDataset, custom_collate
-from model import ConditionalGraphGenerator, GraphDiscriminator, get_vit_classifier, get_resnet50_classifier
+from model import ConditionalGraphGenerator, GraphDiscriminator, get_vit_classifier, get_resnet50_classifier, get_efficientnet_classifier
 from train import train_gan, train_combined_cgan, evaluate_model
 import torch.optim as optim
 import torch.nn as nn
@@ -122,16 +122,16 @@ def main():
     full_dataset = HamiltonianGraphDataset(hamiltonian_dir, non_hamiltonian_dir)
 
     # Define the sample size you want to use (arbitrary number)
-    sample_size = 200
+    sample_size = 1000
     # Call the function to sample datasets
     train_dataset, val_dataset, test_dataset, pretrain_dataset = sample_train_val(full_dataset, sample_size=sample_size)
 
     # Create the DataLoader with the custom collate function
     # ---- Create DataLoaders for Train, Validation, and Test ----
     # Create DataLoader with the balanced datasets
-    train_dataloader = DataLoader(train_dataset, batch_size=16, shuffle=True, num_workers=8,  collate_fn=my_collate_fn)
-    val_dataloader = DataLoader(val_dataset, batch_size=16, shuffle=False, num_workers=8,  collate_fn=my_collate_fn)
-    test_dataloader = DataLoader(test_dataset, batch_size=16, shuffle=False, num_workers=8,  collate_fn=my_collate_fn)
+    train_dataloader = DataLoader(train_dataset, batch_size=36, shuffle=True, num_workers=8,  collate_fn=my_collate_fn)
+    val_dataloader = DataLoader(val_dataset, batch_size=36, shuffle=False, num_workers=8,  collate_fn=my_collate_fn)
+    test_dataloader = DataLoader(test_dataset, batch_size=36, shuffle=False, num_workers=8,  collate_fn=my_collate_fn)
     # DataLoader for pretraining
     pretrain_dataloader = DataLoader(pretrain_dataset, batch_size=96, shuffle=True, num_workers=8, collate_fn=my_collate_fn)
 
@@ -159,6 +159,7 @@ def main():
     generator = ConditionalGraphGenerator().to(device)  # Use the conditional generator
     discriminator = GraphDiscriminator().to(device)  # Move model to device
     # classifier = get_resnet50_classifier().to(device)  # Already moved to device in the function
+    # classifier = get_efficientnet_classifier().to(device)  # Already moved to device in the function
     classifier = get_vit_classifier().to(device)  # Already moved to device in the function
 
     # # Use DataParallel to parallelize over multiple GPUs
@@ -193,6 +194,7 @@ def main():
         discriminator = GraphDiscriminator().to(device)  # Move model to device
         classifier = get_vit_classifier().to(device)  # Already moved to device in the function
         # classifier = get_resnet50_classifier().to(device)
+        # classifier = get_efficientnet_classifier().to(device)
         # Load pretrained generator and discriminator
         try:
             print("Loading pretrained generator and discriminator...")
