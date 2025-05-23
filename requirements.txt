@@ -1,0 +1,114 @@
+aiohappyeyeballs==2.4.3
+aiohttp==3.10.10
+aiosignal @ file:///tmp/build/80754af9/aiosignal_1637843061372/work
+asttokens @ file:///home/conda/feedstock_root/build_artifacts/asttokens_1733250440834/work
+async-timeout==4.0.3
+attrs==24.2.0
+Bottleneck @ file:///croot/bottleneck_1731058641041/work
+Brotli @ file:///croot/brotli-split_1714483155106/work
+certifi @ file:///croot/certifi_1738623731865/work/certifi
+charset-normalizer @ file:///croot/charset-normalizer_1721748349566/work
+comm @ file:///home/conda/feedstock_root/build_artifacts/comm_1733502965406/work
+contourpy @ file:///croot/contourpy_1700583582875/work
+cycler @ file:///tmp/build/80754af9/cycler_1637851556182/work
+cysignals==1.12.0rc2
+Cython==3.0.12
+datasets @ file:///croot/datasets_1741367990881/work
+debugpy @ file:///home/conda/feedstock_root/build_artifacts/debugpy_1744321252239/work
+decorator @ file:///home/conda/feedstock_root/build_artifacts/decorator_1740384970518/work
+dill @ file:///croot/dill_1715094664823/work
+exceptiongroup @ file:///home/conda/feedstock_root/build_artifacts/exceptiongroup_1733208806608/work
+executing @ file:///home/conda/feedstock_root/build_artifacts/executing_1733569351617/work
+filelock @ file:///croot/filelock_1700591183607/work
+fonttools @ file:///croot/fonttools_1713551344105/work
+frozenlist @ file:///croot/frozenlist_1730902802621/work
+fsspec==2024.10.0
+gmpy2 @ file:///tmp/build/80754af9/gmpy2_1645455533097/work
+huggingface-hub==0.26.2
+idna @ file:///croot/idna_1714398848350/work
+imageio @ file:///croot/imageio_1738159938990/work
+importlib_metadata @ file:///home/conda/feedstock_root/build_artifacts/importlib-metadata_1737420181517/work
+ipykernel @ file:///home/conda/feedstock_root/build_artifacts/ipykernel_1719845459717/work
+ipython @ file:///home/conda/feedstock_root/build_artifacts/bld/rattler-build_ipython_1744034854/work
+jedi @ file:///home/conda/feedstock_root/build_artifacts/jedi_1733300866624/work
+Jinja2 @ file:///croot/jinja2_1730902924303/work
+joblib==1.4.2
+jupyter_client @ file:///home/conda/feedstock_root/build_artifacts/jupyter_client_1733440914442/work
+jupyter_core @ file:///home/conda/feedstock_root/build_artifacts/jupyter_core_1727163409502/work
+kiwisolver @ file:///croot/kiwisolver_1672387140495/work
+kornia==0.7.4
+kornia_rs==0.1.7
+MarkupSafe @ file:///croot/markupsafe_1704205993651/work
+matplotlib==3.9.2
+matplotlib-inline @ file:///home/conda/feedstock_root/build_artifacts/matplotlib-inline_1733416936468/work
+memory_allocator==0.1.4
+mkl-service==2.4.0
+mkl_fft @ file:///io/mkl313/mkl_fft_1730824109137/work
+mkl_random @ file:///io/mkl313/mkl_random_1730823916628/work
+mpmath @ file:///croot/mpmath_1690848262763/work
+multidict @ file:///croot/multidict_1730905498140/work
+multiprocess @ file:///croot/multiprocess_1692294385131/work
+nest_asyncio @ file:///home/conda/feedstock_root/build_artifacts/nest-asyncio_1733325553580/work
+networkx @ file:///croot/networkx_1717597493534/work
+numexpr @ file:///croot/numexpr_1730215937391/work
+numpy @ file:///croot/numpy_and_numpy_base_1708638617955/work/dist/numpy-1.26.4-cp310-cp310-linux_x86_64.whl#sha256=d8cd837ed43e87f77e6efaa08e8de927ca030a1c9c5d04624432d6fb9a74a5ee
+nvidia-ml-py3==7.352.0
+packaging @ file:///croot/packaging_1720101850331/work
+pandas @ file:///croot/pandas_1732735089971/work/dist/pandas-2.2.3-cp310-cp310-linux_x86_64.whl#sha256=3fa290e76efa7b7868273de6ab4ee4a73af177cdd88202834ad0eea6dd898d9e
+parso @ file:///home/conda/feedstock_root/build_artifacts/parso_1733271261340/work
+passagemath-categories==10.5.27
+passagemath-graphs==10.5.27
+passagemath-objects==10.5.27
+passagemath-plantri==10.5.27
+pexpect @ file:///home/conda/feedstock_root/build_artifacts/pexpect_1733301927746/work
+pickleshare @ file:///home/conda/feedstock_root/build_artifacts/pickleshare_1733327343728/work
+pillow @ file:///croot/pillow_1721059439630/work
+platformdirs @ file:///home/conda/feedstock_root/build_artifacts/bld/rattler-build_platformdirs_1742485085/work
+ply==3.11
+prompt_toolkit @ file:///home/conda/feedstock_root/build_artifacts/prompt-toolkit_1744724089886/work
+propcache==0.2.0
+protobuf @ file:///croot/protobuf_1742419705443/work/bazel-bin/python/dist/protobuf-5.29.3-cp310-abi3-linux_x86_64.whl#sha256=e55acfd476c7a1d8544b98df45c7d8e9c425b9caf0abb1f7e7cfa87c2e017bd1
+psutil==6.1.0
+ptyprocess @ file:///home/conda/feedstock_root/build_artifacts/ptyprocess_1733302279685/work/dist/ptyprocess-0.7.0-py2.py3-none-any.whl#sha256=92c32ff62b5fd8cf325bec5ab90d7be3d2a8ca8c8a3813ff487a8d2002630d1f
+pure_eval @ file:///home/conda/feedstock_root/build_artifacts/pure_eval_1733569405015/work
+pyarrow @ file:///croot/pyarrow_1738229418212/work/python
+Pygments @ file:///home/conda/feedstock_root/build_artifacts/pygments_1736243443484/work
+pyparsing @ file:///croot/pyparsing_1725041624202/work
+PyQt5==5.15.10
+PyQt5-sip @ file:///croot/pyqt-split_1698769088074/work/pyqt_sip
+PySocks @ file:///home/builder/ci_310/pysocks_1640793678128/work
+python-dateutil @ file:///croot/python-dateutil_1716495738603/work
+pytz @ file:///croot/pytz_1713974312559/work
+PyYAML @ file:///croot/pyyaml_1728657952215/work
+pyzmq @ file:///home/conda/feedstock_root/build_artifacts/pyzmq_1725430379702/work
+regex @ file:///croot/regex_1736540786412/work
+requests @ file:///croot/requests_1730999120400/work
+safetensors==0.4.5
+scikit-learn==1.5.2
+scipy==1.14.1
+sip @ file:///croot/sip_1698675935381/work
+six @ file:///tmp/build/80754af9/six_1644875935023/work
+stack_data @ file:///home/conda/feedstock_root/build_artifacts/stack_data_1733569443808/work
+sympy @ file:///croot/sympy_1724938189289/work
+threadpoolctl==3.5.0
+timm @ git+https://github.com/huggingface/pytorch-image-models.git@3ff38990264d7464ffd43ac2ddc26da04ff6355c
+tokenizers @ file:///croot/tokenizers_1741370336077/work
+tomli @ file:///opt/conda/conda-bld/tomli_1657175507142/work
+torch==2.4.0
+torch-geometric==2.6.1
+torchaudio==2.4.0
+torchvision==0.19.0
+tornado @ file:///croot/tornado_1718740109488/work
+tqdm==4.67.0
+traitlets @ file:///home/conda/feedstock_root/build_artifacts/traitlets_1733367359838/work
+transformers @ file:///croot/transformers_1741705251010/work
+transforms==0.2.1
+triton==3.0.0
+typing_extensions @ file:///croot/typing_extensions_1715268824938/work
+tzdata @ file:///croot/python-tzdata_1690578112552/work
+unicodedata2 @ file:///croot/unicodedata2_1713212950228/work
+urllib3 @ file:///croot/urllib3_1727769808118/work
+wcwidth @ file:///home/conda/feedstock_root/build_artifacts/wcwidth_1733231326287/work
+xxhash @ file:///croot/python-xxhash_1737039434400/work
+yarl==1.17.1
+zipp @ file:///home/conda/feedstock_root/build_artifacts/zipp_1732827521216/work
