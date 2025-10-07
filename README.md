@@ -24,9 +24,9 @@ This repository implements VSAL (Vision Solver with Adaptive Layout), a deep lea
 │   ├── planarity_verification/
 │   └── tree_recognition/
 ├── baselines/                    # Comparison baseline implementations
-│   ├── EquiformerV2.md
 │   ├── Graphormer/
 │   ├── Graphormer-GD/
+│   ├── EquiformerV2.md
 │   ├── GraphsGPT.md
 │   ├── Naive_bayes/
 │   ├── Random_guess/
