@@ -26,6 +26,7 @@ This repository implements VSAL (Vision Solver with Adaptive Layout), a deep lea
 ├── baselines/                    # Comparison baseline implementations
 │   ├── EquiformerV2.md
 │   ├── Graphormer/
+│   ├── Graphormer-GD/
 │   ├── GraphsGPT.md
 │   ├── Naive_bayes/
 │   ├── Random_guess/
@@ -69,6 +70,7 @@ Each implementation module contains:
 - **`baselines/`**: Contains implementations of comparison methods:
   - VN-Solver
   - Graphormer
+  - Graphormer-GD
   - EquiformerV2
   - GraphsGPT
   - Naive Bayes
@@ -166,6 +168,7 @@ Each task includes datasets of different sizes:
 The framework includes comprehensive baseline implementations for comparison:
 - **VN-Solver**
 - **Graphormer**
+- **Graphormer-GD**
 - **EquiformerV2**
 - **GraphsGPT**
 - **Naive Bayes**
