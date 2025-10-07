@@ -110,7 +110,7 @@ if __name__ == "__main__":
     parser.add_argument("--n-min",   type=int,   default=401,  help="Minimum number of nodes")
     parser.add_argument("--n-max",   type=int,   default=500, help="Maximum number of nodes")
     parser.add_argument("--density", type=float, default=0.008, help="Target density ρ (0<ρ<1)")
-    parser.add_argument("--claws",   type=int,   default=20,   help="K1,3’s to plant in non-claw-free")
+    parser.add_argument("--claws",   type=int,   default=15,   help="K1,3’s to plant in non-claw-free")
     parser.add_argument("--cf-dir",  type=str,   default="clawfree_graphs",     help="Output directory for claw-free")
     parser.add_argument("--ncf-dir", type=str,   default="nonclawfree_graphs", help="Output directory for non-claw-free")
     parser.add_argument("--seed",    type=int,   default=42,    help="Random seed")
