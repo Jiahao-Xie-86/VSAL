@@ -25,7 +25,7 @@ def generate_easily_distinguished_nontree_graph(n, seed=None):
     # decide how many extra edges to add: 10%–30% of (n-1)
     base = n - 1
     k_min = max(1, int(0.05 * base))
-    k_max = max(1, int(0.25 * base))
+    k_max = max(1, int(0.12 * base))
     k = random.randint(k_min, k_max)
 
     # sample and add them
