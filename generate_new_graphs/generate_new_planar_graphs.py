@@ -8,7 +8,7 @@ from multiprocessing import Pool, cpu_count
 # ── Configuration ─────────────────────────────────────────────────────────────
 NUM_GRAPHS     = 2000
 NODE_RANGE     = (401, 500)
-DENSITY_FACTOR = 1.3   # planar graphs will have ≈ n-1 + extra edges, extra ≈ 0.3·n
+DENSITY_FACTOR = 1.6   # planar graphs will have ≈ n-1 + extra edges, extra ≈ 0.6·n
 PLANAR_DIR     = "planar_graphs"
 NONPLANAR_DIR  = "nonplanar_graphs"
 
