@@ -17,7 +17,7 @@ def make_hamiltonian_graph(n_nodes, p_extra):
                 G.add_edge(i, j)
     return nx.to_numpy_array(G, dtype=np.int8)
 
-def make_nonhamiltonian_graph(n_nodes, p_extra, min_breaks=200, max_breaks=300):
+def make_nonhamiltonian_graph(n_nodes, p_extra, min_breaks=150, max_breaks=250):
     """
     Start from the n‑cycle, then remove between min_breaks and max_breaks edges,
     then sprinkle on extra chords with probability p_extra.
