@@ -1,6 +1,6 @@
-# VSAL: Graph Property Detection Framework
+# VSAL: Vision-based Graph Property Detection Framework
 
-This repository implements VSAL (Vision Solver with Adaptive Layout), a deep learning framework for graph property detection. The project includes dataset preprocessing, model definition and training, evaluation, and utility functions to streamline the workflow. It also provides comprehensive baseline methods for comparison.
+This repository implements VSAL (Vision neural Solver with Adaptive Layout), a deep learning framework for graph property detection. The project includes dataset preprocessing, model definition and training, evaluation, and utility functions to streamline the workflow. It also provides comprehensive baseline methods for comparison.
 
 ## Project Structure
 
